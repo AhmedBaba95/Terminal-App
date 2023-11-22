@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Terminal from "./components/Terminal";
+import Terminal, { terminalLinesData } from "./components/Terminal";
 import playImage from "../public/play-xxl.png";
 import fullScreen from "../public/full-screen.png";
 import minimizeImage from "../public/minimize.png";
@@ -9,11 +9,11 @@ function App() {
   const [isFullScreen, setFullScreen] = useState(false);
   const [isPlaying, setPlaying] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [textIndex, setTextIndex] = useState(0);
   const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
   const toggleFullScreen = () => {
     if (!isFullScreen) {
-      // Enter fullscreen
       const element = document.documentElement;
       if (element.requestFullscreen) {
         element.requestFullscreen();
@@ -25,7 +25,6 @@ function App() {
         element.msRequestFullscreen();
       }
     } else {
-      // Exit fullscreen
       if (document.exitFullscreen) {
         document.exitFullscreen();
       } else if (document.mozCancelFullScreen) {
@@ -40,8 +39,21 @@ function App() {
   };
 
   const togglePlayPause = () => {
-    setPlaying(!isPlaying);
-    setHasVideoPlayed(true);
+    if (textIndex === terminalLinesData.length) {
+      setTimer(0);
+      setTextIndex(0);
+      setPlaying(false);
+    } else {
+      // Check if the timer has reached 1:24 (84 seconds)
+      if (timer < 84) {
+        setPlaying(!isPlaying);
+        setHasVideoPlayed(true);
+      } else {
+        setPlaying(false);
+        setTimer(0);
+        setTextIndex(0);
+      }
+    }
   };
 
   useEffect(() => {
@@ -53,10 +65,15 @@ function App() {
       }, 1000);
     } else {
       clearInterval(interval);
+
+      // Reset timer to 0 when writing is complete
+      if (textIndex === terminalLinesData.length) {
+        setTimer(0);
+      }
     }
 
     return () => clearInterval(interval);
-  }, [isPlaying]);
+  }, [isPlaying, terminalLinesData, textIndex]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -83,7 +100,7 @@ function App() {
         </button>
       )}
 
-      <Terminal isPlaying={isPlaying} />
+      <Terminal isPlaying={isPlaying} isFullScreen={isFullScreen} />
 
       <div className="videoBar absolute flex pr-2 bottom-0 w-full h-[8%] bg-black border-t-2 border-gray-700">
         <button
