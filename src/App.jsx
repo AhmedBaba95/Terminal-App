@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import Terminal, { terminalLinesData } from "./components/Terminal";
+import Terminal from "./components/Terminal";
 import playImage from "../public/play-xxl.png";
 import fullScreen from "../public/full-screen.png";
 import minimizeImage from "../public/minimize.png";
@@ -39,20 +39,13 @@ function App() {
   };
 
   const togglePlayPause = () => {
-    if (textIndex === terminalLinesData.length) {
+    if (timer < 80) {
+      setPlaying(!isPlaying);
+      setHasVideoPlayed(true);
+    } else {
+      setPlaying(false);
       setTimer(0);
       setTextIndex(0);
-      setPlaying(false);
-    } else {
-      // Check if the timer has reached 1:24 (84 seconds)
-      if (timer < 84) {
-        setPlaying(!isPlaying);
-        setHasVideoPlayed(true);
-      } else {
-        setPlaying(false);
-        setTimer(0);
-        setTextIndex(0);
-      }
     }
   };
 
@@ -65,15 +58,10 @@ function App() {
       }, 1000);
     } else {
       clearInterval(interval);
-
-      // Reset timer to 0 when writing is complete
-      if (textIndex === terminalLinesData.length) {
-        setTimer(0);
-      }
     }
 
     return () => clearInterval(interval);
-  }, [isPlaying, terminalLinesData, textIndex]);
+  }, [isPlaying, textIndex]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
