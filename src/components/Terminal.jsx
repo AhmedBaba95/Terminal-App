@@ -29,7 +29,7 @@ export const terminalLinesData = [
   "$ # That's it! Check out the other screencasts to see how to actually use borg backup.\n",
 ];
 
-const Terminal = ({ isPlaying, isFullScreen }) => {
+const Terminal = ({ isPlaying, setPlaying, isFullScreen, timer, setTimer }) => {
   const [lines, setLines] = useState([]);
   const [currentLine, setCurrentLine] = useState("");
   const [textIndex, setTextIndex] = useState(0);
@@ -57,13 +57,20 @@ const Terminal = ({ isPlaying, isFullScreen }) => {
             setTextIndex((prevIndex) => prevIndex + 1);
           }
         } else {
+          // Check if the timer is finished, and reset if needed
+          if (timer > 87) {
+            setTimer(0);
+            setTextIndex(0);
+            setPlaying(false);
+            setLines([]);
+          }
           clearInterval(interval); // Clear interval when writing is complete
         }
       }, typingInterval);
 
       return () => clearInterval(interval);
     }
-  }, [isPlaying, textIndex, currentLine]);
+  }, [isPlaying, textIndex, currentLine, timer]);
 
   useEffect(() => {
     if (isFullScreen) {

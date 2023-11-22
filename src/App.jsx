@@ -39,14 +39,8 @@ function App() {
   };
 
   const togglePlayPause = () => {
-    if (timer < 80) {
-      setPlaying(!isPlaying);
-      setHasVideoPlayed(true);
-    } else {
-      setPlaying(false);
-      setTimer(0);
-      setTextIndex(0);
-    }
+    setPlaying(!isPlaying);
+    setHasVideoPlayed(true);
   };
 
   useEffect(() => {
@@ -61,7 +55,7 @@ function App() {
     }
 
     return () => clearInterval(interval);
-  }, [isPlaying, textIndex]);
+  }, [isPlaying, textIndex, timer]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -88,7 +82,13 @@ function App() {
         </button>
       )}
 
-      <Terminal isPlaying={isPlaying} isFullScreen={isFullScreen} />
+      <Terminal
+        setPlaying={setPlaying}
+        isPlaying={isPlaying}
+        isFullScreen={isFullScreen}
+        timer={timer}
+        setTimer={setTimer}
+      />
 
       <div className="videoBar absolute flex pr-2 bottom-0 w-full h-[8%] bg-black border-t-2 border-gray-700">
         <button
