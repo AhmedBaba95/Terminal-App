@@ -24,6 +24,9 @@ export const VideoBar = ({
   minimizeImage,
   fullScreen,
 }) => {
+  // Calculate the percentage of completion for the progress bar
+  const completionPercentage = timer / 107;
+
   return (
     <div className="videoBar absolute flex pr-2 bottom-0 w-full h-[8%] bg-black border-t-2 border-gray-700">
       <button
@@ -42,7 +45,15 @@ export const VideoBar = ({
       </div>
 
       <div className="w-[90%] h-full flex justify-center items-center ml-2">
-        <div className="w-full h-1 bg-gray-700 "></div>
+        <div
+          className="playbar w-full h-1 bg-gray-700"
+          style={{
+            background: `linear-gradient(to right, #fff, #fff ${
+              completionPercentage * 100
+            }%, #555 ${completionPercentage * 100}%, #555)`,
+            transition: "background 0.5s ease",
+          }}
+        ></div>
       </div>
 
       <button
