@@ -1,0 +1,22 @@
+/* NewTerminal.css */
+
+.terminal {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+.terminal:hover {
+  scrollbar-color: #6c757d transparent; /* Set the color of the scrollbar when hovering */
+}
+
+.terminal::-webkit-scrollbar {
+  width: 8px; /* Set the width of the scrollbar */
+}
+
+.terminal::-webkit-scrollbar-thumb {
+  background-color: transparent; /* Set the color of the scrollbar thumb */
+}
+
+.terminal:hover::-webkit-scrollbar-thumb {
+  background-color: #6c757d; /* Set the color of the scrollbar thumb when hovering */
+}

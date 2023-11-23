@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { VideoBar, PlayButton } from "./components/HtmlComponents";
 import Terminal from "./components/Terminal";
 import playImage from "../public/play-xxl.png";
 import fullScreen from "../public/full-screen.png";
@@ -9,7 +10,6 @@ function App() {
   const [isFullScreen, setFullScreen] = useState(false);
   const [isPlaying, setPlaying] = useState(false);
   const [timer, setTimer] = useState(0);
-  const [textIndex, setTextIndex] = useState(0);
   const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
   const toggleFullScreen = () => {
@@ -55,7 +55,7 @@ function App() {
     }
 
     return () => clearInterval(interval);
-  }, [isPlaying, textIndex, timer]);
+  }, [isPlaying, timer]);
 
   const formatTime = (seconds) => {
     const minutes = Math.floor(seconds / 60)
@@ -67,19 +67,14 @@ function App() {
 
   return (
     <div
-      className={`App flex ${
+      className={`AppDiv flex ${
         isFullScreen
           ? "flex-col items-center justify-center w-screen h-screen mt-0"
           : "w-[55vw] h-[70vh] mt-[15vh]"
-      } bg-gray-950 overflow-auto relative`}
+      } bg-gray-950 overflow-auto  relative`}
     >
       {!hasVideoPlayed && !isPlaying && (
-        <button
-          className="absolute bottom-4 left-0 transform flex justify-center items-center w-full h-full"
-          onClick={togglePlayPause}
-        >
-          <img src={playImage} alt="" className="w-[18%] h-[20%]" />
-        </button>
+        <PlayButton togglePlayPause={togglePlayPause} playImage={playImage} />
       )}
 
       <Terminal
@@ -88,39 +83,22 @@ function App() {
         isFullScreen={isFullScreen}
         timer={timer}
         setTimer={setTimer}
+        togglePlayPause={togglePlayPause}
+        hasVideoPlayed={hasVideoPlayed}
       />
 
-      <div className="videoBar absolute flex pr-2 bottom-0 w-full h-[8%] bg-black border-t-2 border-gray-700">
-        <button
-          className="flex justify-center items-center mx-2"
-          onClick={togglePlayPause}
-        >
-          <img
-            src={isPlaying ? pauseImage : playImage}
-            alt=""
-            className="w-[65%] h-[40%]"
-          />
-        </button>
-
-        <div className="flex justify-center items-center mx-2">
-          <span className="text-gray-400">{formatTime(timer)}</span>
-        </div>
-
-        <div className="w-[90%] h-full flex justify-center items-center ml-2">
-          <div className="w-full h-1 bg-gray-700 "></div>
-        </div>
-
-        <button
-          className="flex justify-center items-center ml-[4%]"
-          onClick={toggleFullScreen}
-        >
-          <img
-            src={isFullScreen ? minimizeImage : fullScreen}
-            alt=""
-            className="object-contain w-[75%] h-[62%]"
-          />
-        </button>
-      </div>
+      <VideoBar
+        isPlaying={isPlaying}
+        togglePlayPause={togglePlayPause}
+        formatTime={formatTime}
+        timer={timer}
+        toggleFullScreen={toggleFullScreen}
+        isFullScreen={isFullScreen}
+        pauseImage={pauseImage}
+        playImage={playImage}
+        minimizeImage={minimizeImage}
+        fullScreen={fullScreen}
+      />
     </div>
   );
 }
