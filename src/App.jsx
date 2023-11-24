@@ -38,7 +38,18 @@ function App() {
     setFullScreen(!isFullScreen);
   };
 
+  const [playbarClicked, setPlaybarClicked] = useState(false);
+  const [intervalCleared, setIntervalCleared] = useState(false);
+  const [displayedText, setDisplayedText] = useState("");
+
   const togglePlayPause = () => {
+    if (intervalCleared) {
+      setDisplayedText("");
+      setIntervalCleared(false);
+      setTimer(0);
+      setPlaying(!isPlaying);
+      setHasVideoPlayed(true);
+    }
     setPlaying(!isPlaying);
     setHasVideoPlayed(true);
   };
@@ -61,7 +72,9 @@ function App() {
     const minutes = Math.floor(seconds / 60)
       .toString()
       .padStart(2, "0");
-    const remainingSeconds = (seconds % 60).toString().padStart(2, "0");
+    const remainingSeconds = Math.round(seconds % 60)
+      .toString()
+      .padStart(2, "0");
     return `${minutes}:${remainingSeconds}`;
   };
 
@@ -69,9 +82,9 @@ function App() {
     <div
       className={`AppDiv flex ${
         isFullScreen
-          ? "flex-col items-center justify-center w-screen h-screen mt-0"
+          ? "flex-col w-screen h-screen mt-0"
           : "w-[55vw] h-[70vh] mt-[15vh]"
-      } bg-gray-950 overflow-auto  relative`}
+      } bg-gray-950 overflow-auto relative`}
     >
       {!hasVideoPlayed && !isPlaying && (
         <PlayButton togglePlayPause={togglePlayPause} playImage={playImage} />
@@ -85,12 +98,18 @@ function App() {
         setTimer={setTimer}
         togglePlayPause={togglePlayPause}
         hasVideoPlayed={hasVideoPlayed}
+        setPlaybarClicked={setPlaybarClicked}
+        playbarClicked={playbarClicked}
+        setIntervalCleared={setIntervalCleared}
+        setDisplayedText={setDisplayedText}
+        displayedText={displayedText}
       />
 
       <VideoBar
         isPlaying={isPlaying}
         togglePlayPause={togglePlayPause}
         formatTime={formatTime}
+        setTimer={setTimer}
         timer={timer}
         toggleFullScreen={toggleFullScreen}
         isFullScreen={isFullScreen}
@@ -98,6 +117,7 @@ function App() {
         playImage={playImage}
         minimizeImage={minimizeImage}
         fullScreen={fullScreen}
+        setPlaybarClicked={setPlaybarClicked}
       />
     </div>
   );

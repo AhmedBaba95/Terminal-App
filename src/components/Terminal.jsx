@@ -2,11 +2,20 @@ import React, { useState, useEffect, useRef } from "react";
 import terminalData from "./TerminalData";
 import "./Terminal.css";
 
-const Terminal = ({ isPlaying, setPlaying, isFullScreen, timer, setTimer }) => {
+const Terminal = ({
+  isPlaying,
+  setPlaying,
+  isFullScreen,
+  timer,
+  setTimer,
+  playbarClicked,
+  setPlaybarClicked,
+  setIntervalCleared,
+  displayedText,
+  setDisplayedText,
+}) => {
   const [textIndex, setTextIndex] = useState(0);
-  const [displayedText, setDisplayedText] = useState("");
   const terminalRef = useRef();
-
   const typingInterval = 45;
 
   useEffect(() => {
@@ -16,17 +25,35 @@ const Terminal = ({ isPlaying, setPlaying, isFullScreen, timer, setTimer }) => {
           setDisplayedText((prevText) => prevText + terminalData[textIndex]);
           setTextIndex((prevIndex) => prevIndex + 1);
         } else {
-          setTimer(0);
-          setTextIndex(0);
           setPlaying(false);
-          setDisplayedText("");
+          setTextIndex(0);
           clearInterval(interval); // Clear interval when writing is complete
+          setIntervalCleared(true);
         }
       }, typingInterval);
 
       return () => clearInterval(interval);
     }
   }, [isPlaying, timer, textIndex, setPlaying, setTimer]);
+
+  // Synchronize text when the timer changes or playbar is clicked
+  useEffect(() => {
+    if (playbarClicked) {
+      synchronizeText(timer);
+      setPlaybarClicked(false); // Reset the playbarClicked state
+    }
+  }, [timer, playbarClicked, setPlaybarClicked]);
+
+  // Function to synchronize text with the progress
+  const synchronizeText = (currentTimer) => {
+    const newTextIndex = Math.floor((currentTimer / 109) * terminalData.length);
+
+    // Include all characters from the beginning to the current textIndex
+    const textToShow = terminalData.substring(0, newTextIndex);
+
+    setDisplayedText(textToShow);
+    setTextIndex(newTextIndex);
+  };
 
   useEffect(() => {
     // Scroll the terminal to the bottom when displayedText changes
@@ -37,7 +64,7 @@ const Terminal = ({ isPlaying, setPlaying, isFullScreen, timer, setTimer }) => {
     <div
       ref={terminalRef}
       className={`terminal ${
-        isFullScreen ? "w-screen h-screen p-5" : "w-[55vw] h-[64vh] p-2"
+        isFullScreen ? "w-screen h-[91%] px-4" : "w-[55vw] h-[64vh] px-2 "
       } overflow-x-hidden overflow-y-auto`}
     >
       <pre
