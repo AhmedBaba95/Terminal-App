@@ -25,6 +25,7 @@ export const VideoBar = ({
   minimizeImage,
   fullScreen,
   setPlaybarClicked,
+  setIntervalCleared,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -45,6 +46,7 @@ export const VideoBar = ({
 
     setTimer(newTimer);
     setPlaybarClicked(true);
+    setIntervalCleared(false);
   };
 
   return (

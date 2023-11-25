@@ -52,6 +52,7 @@ function App() {
       setPlaying(!isPlaying);
       setHasVideoPlayed(true);
     }
+
     setPlaying(!isPlaying);
     setHasVideoPlayed(true);
   };
@@ -122,6 +123,7 @@ function App() {
         minimizeImage={minimizeImage}
         fullScreen={fullScreen}
         setPlaybarClicked={setPlaybarClicked}
+        setIntervalCleared={setIntervalCleared}
       />
     </div>
   );
