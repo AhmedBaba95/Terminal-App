@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { VideoBar, PlayButton } from "./components/HtmlComponents";
+import TitleLogo from "./components/TitleLogo";
 import Terminal from "./components/Terminal";
 import playImage from "../public/play-xxl.png";
 import fullScreen from "../public/full-screen.png";
 import minimizeImage from "../public/minimize.png";
 import pauseImage from "../public/pause.png";
+import borgLogo from "../public/borg-icon.png";
 
 function App() {
   const [isFullScreen, setFullScreen] = useState(false);
@@ -81,13 +83,15 @@ function App() {
   return (
     <div
       className={`AppDiv flex ${
-        isFullScreen
-          ? "flex-col w-screen h-screen mt-0"
-          : "w-[55vw] h-[70vh] mt-[15vh]"
-      } bg-gray-950 overflow-auto relative`}
+        isFullScreen ? "w-screen h-screen mt-0" : "w-[55vw] h-[70vh] mt-[15vh]"
+      } flex-col gap-2 bg-gray-950 overflow-auto relative`}
     >
       {!hasVideoPlayed && !isPlaying && (
         <PlayButton togglePlayPause={togglePlayPause} playImage={playImage} />
+      )}
+
+      {hasVideoPlayed && (
+        <TitleLogo isFullScreen={isFullScreen} borgLogo={borgLogo} />
       )}
 
       <Terminal

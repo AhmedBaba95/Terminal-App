@@ -35,6 +35,7 @@ export const VideoBar = ({
   const progressBarColor = `linear-gradient(to right, #fff ${completionPercentage}%, #555 ${completionPercentage}%, #555)`;
 
   const remainingTime = `-${formatTime(109 - timer)}`;
+  const endTime = `-${formatTime(0)}`;
 
   const handleProgressBarClick = (event) => {
     const playbarDiv = event.currentTarget;
@@ -66,7 +67,11 @@ export const VideoBar = ({
           onMouseLeave={() => setIsHovered(false)}
           style={{ cursor: "default" }}
         >
-          {isHovered ? remainingTime : formatTime(timer)}
+          {isHovered
+            ? timer >= 109
+              ? endTime
+              : remainingTime
+            : formatTime(timer)}
         </span>
       </div>
 

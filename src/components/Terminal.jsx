@@ -64,7 +64,7 @@ const Terminal = ({
     <div
       ref={terminalRef}
       className={`terminal ${
-        isFullScreen ? "w-screen h-[91%] px-4" : "w-[55vw] h-[64vh] px-2 "
+        isFullScreen ? "w-screen h-[87%] px-4" : "w-[55vw] h-[60vh] px-2 "
       } overflow-x-hidden overflow-y-auto`}
     >
       <pre
