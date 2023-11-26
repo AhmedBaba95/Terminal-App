@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import terminalData from "./TerminalData";
 import "./Terminal.css";
+import { timeInterval } from "rxjs";
 
 const Terminal = ({
   isPlaying,
@@ -13,10 +14,10 @@ const Terminal = ({
   setIntervalCleared,
   displayedText,
   setDisplayedText,
+  typingInterval,
 }) => {
   const [textIndex, setTextIndex] = useState(0);
   const terminalRef = useRef();
-  const typingInterval = 45;
 
   useEffect(() => {
     if (isPlaying) {
@@ -46,7 +47,10 @@ const Terminal = ({
 
   // Function to synchronize text with the progress
   const synchronizeText = (currentTimer) => {
-    const newTextIndex = Math.floor((currentTimer / 109) * terminalData.length);
+    const newTextIndex = Math.floor(
+      (currentTimer / ((terminalData.length * typingInterval) / 1000)) *
+        terminalData.length
+    );
 
     // Include all characters from the beginning to the current textIndex
     const textToShow = terminalData.substring(0, newTextIndex);

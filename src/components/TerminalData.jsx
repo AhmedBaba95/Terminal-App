@@ -1,6 +1,6 @@
-const terminalData = `
-$ # This asciinema will show you the installation of borg as a standalone binary. Usually you only need this if you want to have an up-to-date version of borg or no package is available for your distro/OS.
-$ # First, we need to download the version, we'd like to install…
+const terminalData = ` # This asciinema will show you the installation of borg as a standalone binary. Usually you only need this if you want to have an up-to-date version of borg or no package is available for your distro/OS.
+$ # First, we need to dow
+$nload the version, we'd like to install…
 $ wget -q --show-progress\nhttps://github.com/borgbackup/borg/releases/download/1.1.0b6/borg-linux64
 $ # and do not forget the GPG signature…!
 $ wget -q --show-progress\https://github.com/borgbackup/borg/releases/download/1.1.0b6/borg-linux64.asc

@@ -12,6 +12,7 @@ function App() {
   const [isFullScreen, setFullScreen] = useState(false);
   const [isPlaying, setPlaying] = useState(false);
   const [timer, setTimer] = useState(0);
+  const [timer1, setTimer1] = useState(0);
   const [hasVideoPlayed, setHasVideoPlayed] = useState(false);
 
   const toggleFullScreen = () => {
@@ -52,18 +53,18 @@ function App() {
       setPlaying(!isPlaying);
       setHasVideoPlayed(true);
     }
-
     setPlaying(!isPlaying);
     setHasVideoPlayed(true);
   };
 
+  const typingInterval = 45;
   useEffect(() => {
     let interval;
 
     if (isPlaying) {
       interval = setInterval(() => {
-        setTimer((prevTimer) => prevTimer + 1);
-      }, 1000);
+        setTimer((prevTimer) => prevTimer + typingInterval / 1000);
+      }, typingInterval);
     } else {
       clearInterval(interval);
     }
@@ -75,7 +76,7 @@ function App() {
     const minutes = Math.floor(seconds / 60)
       .toString()
       .padStart(2, "0");
-    const remainingSeconds = Math.round(seconds % 60)
+    const remainingSeconds = Math.floor(seconds % 60)
       .toString()
       .padStart(2, "0");
     return `${minutes}:${remainingSeconds}`;
@@ -108,6 +109,7 @@ function App() {
         setIntervalCleared={setIntervalCleared}
         setDisplayedText={setDisplayedText}
         displayedText={displayedText}
+        typingInterval={typingInterval}
       />
 
       <VideoBar
@@ -124,6 +126,7 @@ function App() {
         fullScreen={fullScreen}
         setPlaybarClicked={setPlaybarClicked}
         setIntervalCleared={setIntervalCleared}
+        typingInterval={typingInterval}
       />
     </div>
   );

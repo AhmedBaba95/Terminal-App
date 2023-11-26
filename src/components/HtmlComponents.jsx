@@ -1,6 +1,6 @@
 // HtmlComponents.js
 import React, { useState } from "react";
-
+import terminalData from "./TerminalData";
 export const PlayButton = ({ togglePlayPause, playImage }) => {
   return (
     <button
@@ -26,23 +26,28 @@ export const VideoBar = ({
   fullScreen,
   setPlaybarClicked,
   setIntervalCleared,
+  typingInterval,
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
   // Calculate the percentage of completion for the progress bar
-  const completionPercentage = (timer / 109) * 100;
-
+  const completionPercentage =
+    (timer / ((terminalData.length * typingInterval) / 1000)) * 100;
   // Calculate the color based on the completion percentage
   const progressBarColor = `linear-gradient(to right, #fff ${completionPercentage}%, #555 ${completionPercentage}%, #555)`;
 
-  const remainingTime = `-${formatTime(109 - timer)}`;
+  const remainingTime = `-${formatTime(
+    (terminalData.length * typingInterval) / 1000 - timer
+  )}`;
   const endTime = `-${formatTime(0)}`;
 
   const handleProgressBarClick = (event) => {
     const playbarDiv = event.currentTarget;
     const clickX = event.clientX - playbarDiv.getBoundingClientRect().left;
     const percentageClicked = (clickX / playbarDiv.offsetWidth) * 100;
-    const newTimer = (percentageClicked / 100) * 109;
+    const newTimer =
+      (percentageClicked / 100) *
+      ((terminalData.length * typingInterval) / 1000);
 
     setTimer(newTimer);
     setPlaybarClicked(true);
@@ -70,7 +75,7 @@ export const VideoBar = ({
           style={{ cursor: "default" }}
         >
           {isHovered
-            ? timer >= 109
+            ? timer >= (terminalData.length * typingInterval) / 1000
               ? endTime
               : remainingTime
             : formatTime(timer)}
